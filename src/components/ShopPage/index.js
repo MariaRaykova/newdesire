@@ -5,7 +5,7 @@ import PageWrapper from "../PageWrapper";
 import AuthContext from "../../contexts/AuthContext";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCategories, getAllProducts, getAllProductsByCategory } from "../../redux/action/productsActions";
-
+import "./index.scss"
 const Shop = (props) => {
   const context = useContext(AuthContext);
   const [products, setProducts] = useState()
@@ -14,20 +14,19 @@ const Shop = (props) => {
   const loading = useSelector((state) => state.productsReducer.loading);
   const [success, setSuccess] = useState(false);
   const dispatch = useDispatch(); 
-  console.log(JSON.stringify(products))
+
   useEffect(() => {
     dispatch(getAllCategories());
     if (props.match.params.category) {
       dispatch(getAllProductsByCategory(props.match.params.category));
+  
     } else {
       dispatch(getAllProducts());
-    }
-    if(productsList){
-      setProducts(productsList)
-    }
-  }, []);
  
-  console.log()
+    }
+   
+  },[]);
+ 
   const showLoading = () => {
     if (loading) {
       return (
@@ -35,6 +34,9 @@ const Shop = (props) => {
           <h2>Loading...</h2>
         </div>
       );
+    }else 
+    {
+      setSuccess(true)
     }
   };
   const categoryFilter = () => {
@@ -57,7 +59,7 @@ const Shop = (props) => {
         <div className="card-container">
           <article className="layout-flex">
             {/* за да заредим всички items */}
-            {products?.map((p) => (
+            {productsList?.map((p) => (
               <ProductCard key={p?._id} {...p} />
             ))}
           </article>

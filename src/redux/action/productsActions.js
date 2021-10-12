@@ -12,7 +12,7 @@ export const getAllProducts = () => (dispatch) => {
   });
   getProducts()
     .then((res) => {
-      console.log("ot getProducts : " + JSON.stringify(res))
+ 
       dispatch({
         type: GET_ALL_PRODUCTS_SUCCESS,
         payload: res
@@ -160,7 +160,6 @@ export const getCoverflowImageAction = () => (dispatch)=>{
   });
   getCoverflowImage()
   .then((res) => {
-    console.log("ot getCoverflowImage : " + res)
       dispatch({
         type: GET_COVERFLOW_IMAGE_SUCCESS,
         payload:res

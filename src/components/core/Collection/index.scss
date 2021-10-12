@@ -1,7 +1,54 @@
+
+@mixin bp($point) {
+    @if $point==desktop-large {
+        @media (min-width: 1600px) {
+            @content;
+        }
+    }
+    @else if $point==desktop {
+        @media (min-width: 1250px) {
+            @content;
+        }
+    }
+    @else if $point==laptop {
+        @media (min-width: 1024px) {
+            @content;
+        }
+    }
+    @else if $point==mobile {
+        @media (max-width: 1023px) {
+            @content;
+        }
+    }
+    @else if $point==phone {
+        @media (max-width: 650px) {
+            @content;
+        }
+    }
+}
+@media screen and (max-width: 780px) {
+    .swiper-container {
+      width: 100vh;
+      max-width: 100vh;
+    }
+  }
+
+
+// @include bp(mobile) {
+//     .mySwiper{
+//         width: 100vw;
+//         max-width:100vw;
+//     }
+// }
+
+
 .new-collection  {
+    .mySwiper{
+        width: 1200px;
+        height: 420px;
+    }
     .mySwiper .swiper-slide {
-        // width: 25%;
-        height: 100%;
+        
         opacity: 1;
     } 
     .product-options{

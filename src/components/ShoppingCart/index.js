@@ -57,8 +57,7 @@ const dispatch = useDispatch();
     const city = e.target.city.value;
     const address = e.target.address.value;
     const totalAmount = getTotal()
-   console.log(e.target.city.value)
-   console.log(e.target.address.value)
+ 
    
     createOrder({ email, name: userName, phone, city, address, userId, cartProducts, totalAmount }).then(
       (res) => {

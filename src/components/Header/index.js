@@ -66,10 +66,10 @@ const toggleCartDropdown = () =>{
           <span></span>
           <span></span>
           <ul id="menu">
-            <p className="sidebar-header">New Desire Boutique</p>
+            <h1 className="sidebar-header">New Desire Boutique</h1>
             {context.isLogged ? (
             <ul>
-              <li>Welcome,{context.user?.name}!</li>
+              <li className="welcome">Welcome,{context.user?.name}!</li>
               {profilePage()}
             </ul>
           ) : null }
@@ -86,11 +86,6 @@ const toggleCartDropdown = () =>{
             <li>
               <NavLink activeClassName="nav-link-selected" to="/contacts">
                 Contact Us
-              </NavLink>
-            </li>
-            <li>
-              <NavLink activeClassName="nav-link-selected" to="/admin">
-                Admin
               </NavLink>
             </li>
           </ul>
