@@ -8,8 +8,8 @@ import PageWrapper from "../PageWrapper";
 import { emptyCart, loadCart, finishOrder } from "../../redux/action/cartActions";
 import { useDispatch, useSelector } from "react-redux";
 import CartItem from "../CartItem";
-import Checkout from "../Checkout/stripe-checkout"
-
+import Checkout from "../Checkout"
+import "./index.scss"
 // import { STRIPE_PUBLISHABLE } from '../../config';
 
 
@@ -21,25 +21,16 @@ const Cart = () => {
   const [success, setSuccess] = useState(false);
   const [userName, setUserName] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
-
   const userId = authContext.user?._id ? authContext.user?._id : "";
   const cartProducts = useSelector((state) => state.cartReducer.cartProducts);
-const  isFinished = useSelector((state) => state.cartReducer.finishOrder);
-const dispatch = useDispatch();
-// const ELEMENTS_OPTIONS = {
-//   fonts: [
-//     {
-//       cssSrc: "https://fonts.googleapis.com/css?family=Roboto"
-//     }
-//   ]
-// };
+  const isFinished = useSelector((state) => state.cartReducer.finishOrder);
+  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(loadCart());
-       if (userId !== "") {
+    if (userId !== "") {
       setUserName(authContext.user.name);
       setUserEmail(authContext.user.email);
     }
-    
     setNext(true);
   }, [isFinished]);
 
@@ -52,14 +43,19 @@ const dispatch = useDispatch();
   const onOrderSubmitHandler = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
-    const userName = e.target.name.value;
+    if (!userEmail) {
+      setUserEmail(email);
+    }
+    const name = e.target.name.value;
+    if (!userName) {
+      setUserName(name)
+    }
     const phone = e.target.phone.value;
     const city = e.target.city.value;
     const address = e.target.address.value;
     const totalAmount = getTotal()
- 
-   
-    createOrder({ email, name: userName, phone, city, address, userId, cartProducts, totalAmount }).then(
+
+    createOrder({ email, name, phone, city, address, userId, cartProducts, totalAmount }).then(
       (res) => {
         dispatch(emptyCart())
         setNext(false);
@@ -81,15 +77,15 @@ const dispatch = useDispatch();
         <hr />
         <ul className="list-group">
           {cartProducts?.map((i) => (
-            <CartItem  key={i.product._id} {...i} />
+            <CartItem key={i.product._id} {...i} />
           ))}
         </ul>
       </div>
     );
   };
-const onDelete =()=>{
-  setNext(false);
-}
+  const onDelete = () => {
+    setNext(false);
+  }
 
   const noItemsMessage = () => (
     <h3>
@@ -100,7 +96,7 @@ const onDelete =()=>{
     if (next) {
       return (
         <section className="order">
-     <form onSubmit={onOrderSubmitHandler}>
+          <form onSubmit={onOrderSubmitHandler}>
             <fieldset>
               <legend>Shipping Details</legend>
               <p className="field">
@@ -161,9 +157,15 @@ const onDelete =()=>{
                   <span className="actions"></span>
                 </span>
               </p>
+              *You can create orders and simulate transactions by using a test Visa credit card with number 4242 4242 4242 4242 and any future expiration date and 3-digit CVC.
               {/* {getTotal()} */}
             </fieldset>
-            {isFinished ? (<button className="btn-pink" type="submit" > Payment Successful! Finish your order</button>) : null }
+            {isFinished ? (
+              <div>
+                <h3>Payment Successful! Finish your order!</h3>
+                <button className="btn-pink order" type="submit" >Order now!</button>
+              </div>
+            ) : null}
           </form>
         </section>
       )
@@ -173,31 +175,32 @@ const onDelete =()=>{
   return (
     <PageWrapper
       title="Shopping Cart" >
-      {success 
-      ? (showSuccess() ) 
-      : ( 
-      <div>
-        <div >
-          {cartProducts?.length > 0 ? (
-            <div>
-              {showItems(cartProducts)}
-              <div>
-                      <div className="pull-right" style={{margin: '5px', paddingRight: '70px'}}>
-                          Total price: <b>{getTotal()}€</b>
-                      </div>
-              </div>
-              <h3 className="card-header">Finish your order</h3>
-              {showOrderDetails()}
-              {/* <button className="btn-pink" onClick={orderDetailsHandler}>Continue</button> */}
-              {/* <button className="btn-pink" onClick={()=>{dispatch(emptyCart())}}>Clear Cart</button> */}
+      {success
+        ? (showSuccess())
+        : (
+          <div>
+            <div >
+              {cartProducts?.length > 0 ? (
+                <div>
+                  {showItems(cartProducts)}
+                  <div>
+                    <div className="pull-right" style={{ margin: '5px', paddingRight: '70px' }}>
+                      Total price: <b>{getTotal()}€</b>
+                    </div>
+                  </div>
+                  <h3 className="card-header">Finish your order</h3>
+                  {showOrderDetails()}
+                  {/* <button className="btn-pink" onClick={orderDetailsHandler}>Continue</button> */}
+                  {/* <button className="btn-pink" onClick={()=>{dispatch(emptyCart())}}>Clear Cart</button> */}
+                </div>
+              ) : (
+                <div className="col-6">{noItemsMessage()}</div>
+              )}
+           
+              {isFinished ? null : (<div className="checkout-button"> <Checkout className="checkout-button" name={userName} email={userEmail} amount={getTotal()} /> </div>)}
             </div>
-          ) : (
-            <div className="col-6">{noItemsMessage()}</div>
-          )}
-            <Checkout name={userName} email={userEmail} />
-        </div>
-        </div>
-      )}
+          </div>
+        )}
     </PageWrapper>
   );
 };

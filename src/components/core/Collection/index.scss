@@ -73,17 +73,21 @@
  
     .product-image {
         position: relative;
+        display:flex;
+        align-items: center;
+        justify-content: center;
         .semi-transparent-button {
-            top: 35%;
-            left:15%;
+            // top: 35%;
+            // left:15%;
             margin: 0 auto;
-            padding: 0.5em;
+            // padding: 0.5em;
             height: 15%;
             width: 100%;
             max-width: 8em;
             background: #fff; /* fallback color for old browsers */background: rgba(255, 255, 255, 0.5);
             color: #fff;
             text-align: center;
+            line-height: 100%;
             text-decoration: none;
             letter-spacing: 1px;
             transition: all 0.3s ease-out;
@@ -129,7 +133,7 @@
   }
   .product-options {
       display:flex;
-      flex-flow: column wrap;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       .btn-pink {
